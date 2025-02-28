@@ -29,11 +29,11 @@ const propertiesData = [
     land: "800 m²",
     description: "Magnifique villa moderne située dans le quartier prisé de Djidjolé. Cette propriété dispose de 4 chambres spacieuses, 3 salles de bains, un salon lumineux, une cuisine équipée, une terrasse et un jardin aménagé. La villa est construite avec des matériaux de haute qualité et offre un confort exceptionnel.",
     features: ["Piscine", "Jardin aménagé", "Garage pour 2 voitures", "Système d'alarme", "Climatisation", "Groupe électrogène"],
-    imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=60",
+    imageUrl: "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
     additionalImages: [
-      "https://images.unsplash.com/photo-1600585152220-90363fe7e115?w=800&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=800&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&auto=format&fit=crop&q=60",
+      "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
+      "/lovable-uploads/3cd69875-e62a-406b-8d63-32b43b0d4c14.png",
+      "/lovable-uploads/8e3a2ad2-8d16-4d9c-81c0-1a9550ecc66d.png",
     ]
   },
   {
@@ -50,15 +50,36 @@ const propertiesData = [
     land: "N/A",
     description: "Superbe appartement de luxe situé au 3ème étage d'une résidence sécurisée sur l'Avenue de Pya. Il comprend 3 chambres, 2 salles de bains, un grand salon avec balcon, une cuisine moderne équipée et une buanderie. L'appartement bénéficie d'une finition haut de gamme et d'une vue imprenable sur la ville.",
     features: ["Ascenseur", "Parking sécurisé", "Gardiennage 24/7", "Climatisation", "Cuisine équipée", "Balcon"],
-    imageUrl: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&auto=format&fit=crop&q=60",
+    imageUrl: "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
     additionalImages: [
-      "https://images.unsplash.com/photo-1600566753316-20d1c5b336bf?w=800&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1600585154526-990dced4db3d?w=800&auto=format&fit=crop&q=60",
+      "/lovable-uploads/3cd69875-e62a-406b-8d63-32b43b0d4c14.png",
+      "/lovable-uploads/e269cc66-ac03-4635-ab20-594cd33eed3b.png",
+      "/lovable-uploads/b98932f2-395c-40a2-8cc2-6658bc67640c.png",
     ]
   },
   {
     id: 3,
+    title: "Maison de Vacances",
+    price: "120 000 000 FCFA",
+    location: "Baguida, Lomé",
+    type: "Villa",
+    status: "vendre",
+    reference: "09-23-BGD3V",
+    bedrooms: 3,
+    bathrooms: 2,
+    size: "220 m²",
+    land: "600 m²",
+    description: "Belle maison de vacances située à Baguida, à proximité de la plage. Cette propriété dispose de 3 chambres, 2 salles de bains, un grand salon, une cuisine équipée et une terrasse avec vue sur le jardin. La maison est vendue meublée et équipée, prête à vivre.",
+    features: ["Piscine", "Jardin tropical", "Terrasse", "Climatisation", "Meubles inclus", "Sécurité 24/7"],
+    imageUrl: "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
+    additionalImages: [
+      "/lovable-uploads/447ab3a7-5cc2-48b9-859c-4f8744bed1dc.png",
+      "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
+      "/lovable-uploads/8e3a2ad2-8d16-4d9c-81c0-1a9550ecc66d.png",
+    ]
+  },
+  {
+    id: 4,
     title: "Terrain Commercial",
     price: "200 000 000 FCFA",
     location: "Zone Portuaire, Lomé",
@@ -71,11 +92,53 @@ const propertiesData = [
     land: "2000 m²",
     description: "Terrain commercial exceptionnel situé dans la Zone Portuaire de Lomé. Ce terrain de 2000 m² offre un emplacement stratégique pour tout projet commercial ou industriel. Il dispose de tous les documents légaux et est prêt pour la construction. Une opportunité unique pour les investisseurs.",
     features: ["Emplacement stratégique", "Tous documents en règle", "Accès facile", "Proche des axes principaux", "Viabilisé"],
-    imageUrl: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&auto=format&fit=crop&q=60",
+    imageUrl: "/lovable-uploads/dcbb6f6e-496c-4294-a6bb-a9843ce2b2cd.png",
     additionalImages: [
-      "https://images.unsplash.com/photo-1628744448840-55bdb2497bd4?w=800&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1628744304897-4f3b8f996649?w=800&auto=format&fit=crop&q=60",
-      "https://images.unsplash.com/photo-1628744448688-de58a9055925?w=800&auto=format&fit=crop&q=60",
+      "/lovable-uploads/b98932f2-395c-40a2-8cc2-6658bc67640c.png",
+      "/lovable-uploads/e269cc66-ac03-4635-ab20-594cd33eed3b.png",
+      "/lovable-uploads/1b238cdd-377c-4ce7-bbb0-a04d02a3ee45.png",
+    ]
+  },
+  {
+    id: 5,
+    title: "Résidence Familiale",
+    price: "95 000 000 FCFA",
+    location: "Agbalépédo, Lomé",
+    type: "Maison",
+    status: "louer",
+    reference: "10-23-AGL2M",
+    bedrooms: 4,
+    bathrooms: 3,
+    size: "280 m²",
+    land: "500 m²",
+    description: "Spacieuse résidence familiale située dans le quartier calme d'Agbalépédo. Cette maison dispose de 4 chambres, 3 salles de bains, un grand salon/salle à manger, une cuisine moderne, un bureau et un jardin bien entretenu. Idéale pour une famille à la recherche de confort et de tranquillité.",
+    features: ["Jardin paysager", "Garage pour 2 voitures", "Cuisine équipée", "Climatisation", "Quartier résidentiel", "Sécurité"],
+    imageUrl: "/lovable-uploads/1b238cdd-377c-4ce7-bbb0-a04d02a3ee45.png",
+    additionalImages: [
+      "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
+      "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
+      "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
+    ]
+  },
+  {
+    id: 6,
+    title: "Villa Préstige avec Piscine",
+    price: "250 000 000 FCFA",
+    location: "Aného, Togo",
+    type: "Villa",
+    status: "vendre",
+    reference: "11-23-ANH5P",
+    bedrooms: 5,
+    bathrooms: 4,
+    size: "450 m²",
+    land: "1200 m²",
+    description: "Magnifique villa de prestige située à Aného, à 45 minutes de Lomé. Cette propriété d'exception offre 5 chambres spacieuses avec salles de bains privatives, un vaste salon/salle à manger, une cuisine ultramoderne, une salle de sport, un home cinéma et une superbe piscine. La villa est construite avec des matériaux haut de gamme et dispose d'une vue imprenable sur la mer.",
+    features: ["Grande piscine à débordement", "Vue sur mer", "Domotique", "Cuisine ultramoderne", "Salle de sport", "Home cinéma", "Système d'alarme avancé", "Panneaux solaires"],
+    imageUrl: "/lovable-uploads/447ab3a7-5cc2-48b9-859c-4f8744bed1dc.png",
+    additionalImages: [
+      "/lovable-uploads/8e3a2ad2-8d16-4d9c-81c0-1a9550ecc66d.png",
+      "/lovable-uploads/e269cc66-ac03-4635-ab20-594cd33eed3b.png",
+      "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
     ]
   },
 ];
@@ -139,7 +202,7 @@ const PropertyDetail = () => {
       case "louer":
         return <Badge className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1">À LOUER</Badge>;
       case "indisponible":
-        return <Badge className="bg-red-600 hover:bg-red-700 text-white px-3 py-1">INDISPONIBLE</Badge>;
+        return <Badge className="bg-red-600 hover:bg-red-700 text-white px-3 py-1">NON DISPONIBLE</Badge>;
       default:
         return null;
     }

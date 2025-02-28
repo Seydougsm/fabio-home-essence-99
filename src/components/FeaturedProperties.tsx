@@ -14,7 +14,7 @@ export const FeaturedProperties = () => {
       type: "Villa",
       status: "vendre",
       reference: "08-23-DJL4R",
-      imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=60",
+      imageUrl: "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
     },
     {
       id: 2,
@@ -24,17 +24,47 @@ export const FeaturedProperties = () => {
       type: "Appartement",
       status: "louer",
       reference: "08-23-PYA2L",
-      imageUrl: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&auto=format&fit=crop&q=60",
+      imageUrl: "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
     },
     {
       id: 3,
+      title: "Maison de Vacances",
+      price: "120 000 000 FCFA",
+      location: "Baguida, Lomé",
+      type: "Villa",
+      status: "vendre",
+      reference: "09-23-BGD3V",
+      imageUrl: "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
+    },
+    {
+      id: 4,
       title: "Terrain Commercial",
       price: "200 000 000 FCFA",
       location: "Zone Portuaire, Lomé",
       type: "Terrain",
       status: "indisponible",
       reference: "08-23-PRT1X",
-      imageUrl: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&auto=format&fit=crop&q=60",
+      imageUrl: "/lovable-uploads/dcbb6f6e-496c-4294-a6bb-a9843ce2b2cd.png",
+    },
+    {
+      id: 5,
+      title: "Résidence Familiale",
+      price: "95 000 000 FCFA",
+      location: "Agbalépédo, Lomé",
+      type: "Maison",
+      status: "louer",
+      reference: "10-23-AGL2M",
+      imageUrl: "/lovable-uploads/1b238cdd-377c-4ce7-bbb0-a04d02a3ee45.png",
+    },
+    {
+      id: 6,
+      title: "Villa Préstige avec Piscine",
+      price: "250 000 000 FCFA",
+      location: "Aného, Togo",
+      type: "Villa",
+      status: "vendre",
+      reference: "11-23-ANH5P",
+      imageUrl: "/lovable-uploads/447ab3a7-5cc2-48b9-859c-4f8744bed1dc.png",
     },
   ];
 
@@ -45,7 +75,7 @@ export const FeaturedProperties = () => {
       case "louer":
         return <Badge className="absolute top-2 left-2 bg-blue-600 hover:bg-blue-700">À LOUER</Badge>;
       case "indisponible":
-        return <Badge className="absolute top-2 left-2 bg-red-600 hover:bg-red-700">INDISPONIBLE</Badge>;
+        return <Badge className="absolute top-2 left-2 bg-red-600 hover:bg-red-700">NON DISPONIBLE</Badge>;
       default:
         return null;
     }
