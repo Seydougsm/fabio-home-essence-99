@@ -37,6 +37,13 @@ const Contact = () => {
     });
   };
 
+  const handleAppointmentRequest = () => {
+    toast({
+      title: "Demande de rendez-vous",
+      description: "Nous vous contacterons rapidement pour fixer un rendez-vous.",
+    });
+  };
+
   // Numéros de téléphone avec formatage pour les liens
   const phoneNumbers = [
     { display: "+228 90 12 34 56", raw: "+22890123456" },
@@ -89,12 +96,17 @@ const Contact = () => {
                         <a 
                           href={`tel:${phone.raw}`} 
                           className="hover:text-primary transition-colors"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            window.open(`https://wa.me/${phone.raw.replace('+', '')}`, '_blank');
-                          }}
                         >
-                          {phone.display} (WhatsApp)
+                          {phone.display}
+                        </a>
+                        {" "}
+                        <a
+                          href={`https://wa.me/${phone.raw.replace('+', '')}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-green-600 hover:text-green-700 transition-colors"
+                        >
+                          (WhatsApp)
                         </a>
                       </p>
                     ))}
@@ -158,6 +170,20 @@ const Contact = () => {
               </p>
               <Button variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
                 Postulez maintenant
+              </Button>
+            </div>
+
+            <div className="bg-blue-600 text-white p-6 rounded-lg">
+              <h3 className="text-xl font-bold mb-4">Besoin d'un rendez-vous ?</h3>
+              <p className="mb-4">
+                Notre équipe se tient à votre disposition pour vous rencontrer et discuter de vos projets immobiliers.
+              </p>
+              <Button 
+                onClick={handleAppointmentRequest}
+                variant="outline" 
+                className="text-white border-white hover:bg-white hover:text-blue-600 w-full"
+              >
+                Demander un rendez-vous
               </Button>
             </div>
           </div>
