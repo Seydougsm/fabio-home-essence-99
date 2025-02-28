@@ -3,8 +3,8 @@ import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, MapPin, Home, DollarSign, Users, Bath, BedDouble, Phone } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Calendar, MapPin, Home, DollarSign, Bath, BedDouble, Phone } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -168,8 +168,8 @@ const PropertyDetail = () => {
         <div className="container mx-auto px-4 pt-32 pb-16 text-center">
           <h1 className="text-3xl font-bold mb-4">Propriété non trouvée</h1>
           <p className="mb-8">La propriété que vous recherchez n'existe pas.</p>
-          <Link to="/properties">
-            <Button>Voir toutes les propriétés</Button>
+          <Link to="/">
+            <Button>Retour à l'accueil</Button>
           </Link>
         </div>
       </div>
@@ -468,7 +468,9 @@ const PropertyDetail = () => {
               .map(similarProperty => (
                 <Card key={similarProperty.id} className="overflow-hidden hover:shadow-lg transition-shadow">
                   <div className="relative">
-                    {getStatusBadge(similarProperty.status)}
+                    <div className="absolute top-2 left-2">
+                      {getStatusBadge(similarProperty.status)}
+                    </div>
                     <img
                       src={similarProperty.imageUrl}
                       alt={similarProperty.title}
