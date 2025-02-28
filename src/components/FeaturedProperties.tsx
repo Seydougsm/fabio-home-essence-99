@@ -2,6 +2,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 
 export const FeaturedProperties = () => {
   const properties = [
@@ -11,6 +12,8 @@ export const FeaturedProperties = () => {
       price: "150 000 000 FCFA",
       location: "Djidjolé, Lomé",
       type: "Villa",
+      status: "vendre",
+      reference: "08-23-DJL4R",
       imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&auto=format&fit=crop&q=60",
     },
     {
@@ -19,6 +22,8 @@ export const FeaturedProperties = () => {
       price: "85 000 000 FCFA",
       location: "Avenue de Pya, Lomé",
       type: "Appartement",
+      status: "louer",
+      reference: "08-23-PYA2L",
       imageUrl: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&auto=format&fit=crop&q=60",
     },
     {
@@ -27,9 +32,24 @@ export const FeaturedProperties = () => {
       price: "200 000 000 FCFA",
       location: "Zone Portuaire, Lomé",
       type: "Terrain",
+      status: "indisponible",
+      reference: "08-23-PRT1X",
       imageUrl: "https://images.unsplash.com/photo-1600607687644-c7171b42498f?w=800&auto=format&fit=crop&q=60",
     },
   ];
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "vendre":
+        return <Badge className="absolute top-2 left-2 bg-green-600 hover:bg-green-700">À VENDRE</Badge>;
+      case "louer":
+        return <Badge className="absolute top-2 left-2 bg-blue-600 hover:bg-blue-700">À LOUER</Badge>;
+      case "indisponible":
+        return <Badge className="absolute top-2 left-2 bg-red-600 hover:bg-red-700">INDISPONIBLE</Badge>;
+      default:
+        return null;
+    }
+  };
 
   return (
     <section className="py-16 bg-secondary">
@@ -40,17 +60,27 @@ export const FeaturedProperties = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {properties.map((property) => (
             <Card key={property.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-              <img
-                src={property.imageUrl}
-                alt={property.title}
-                className="w-full h-48 object-cover"
-                loading="lazy"
-              />
+              <div className="relative">
+                {getStatusBadge(property.status)}
+                <img
+                  src={property.imageUrl}
+                  alt={property.title}
+                  className="w-full h-48 object-cover"
+                  loading="lazy"
+                />
+              </div>
               <div className="p-4 space-y-2">
                 <h3 className="text-xl font-semibold">{property.title}</h3>
                 <p className="text-primary font-bold">{property.price}</p>
-                <p className="text-gray-600">{property.location}</p>
+                <div className="flex items-center space-x-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span className="text-gray-600">{property.location}</span>
+                </div>
                 <p className="text-sm text-gray-500">{property.type}</p>
+                <p className="text-xs text-gray-400">Référence: {property.reference}</p>
                 <Link to={`/properties/${property.id}`}>
                   <Button className="w-full mt-4">
                     Voir les détails

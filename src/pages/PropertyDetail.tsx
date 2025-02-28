@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/components/ui/use-toast";
 
 // Mock data - in a real application this would come from an API
@@ -20,6 +21,8 @@ const propertiesData = [
     price: "150 000 000 FCFA",
     location: "Djidjolé, Lomé",
     type: "Villa",
+    status: "vendre",
+    reference: "08-23-DJL4R",
     bedrooms: 4,
     bathrooms: 3,
     size: "350 m²",
@@ -39,6 +42,8 @@ const propertiesData = [
     price: "85 000 000 FCFA",
     location: "Avenue de Pya, Lomé",
     type: "Appartement",
+    status: "louer",
+    reference: "08-23-PYA2L",
     bedrooms: 3,
     bathrooms: 2,
     size: "180 m²",
@@ -58,6 +63,8 @@ const propertiesData = [
     price: "200 000 000 FCFA",
     location: "Zone Portuaire, Lomé",
     type: "Terrain",
+    status: "indisponible",
+    reference: "08-23-PRT1X",
     bedrooms: 0,
     bathrooms: 0,
     size: "N/A",
@@ -125,6 +132,19 @@ const PropertyDetail = () => {
     }
   };
 
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "vendre":
+        return <Badge className="bg-green-600 hover:bg-green-700 text-white px-3 py-1">À VENDRE</Badge>;
+      case "louer":
+        return <Badge className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1">À LOUER</Badge>;
+      case "indisponible":
+        return <Badge className="bg-red-600 hover:bg-red-700 text-white px-3 py-1">INDISPONIBLE</Badge>;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -133,6 +153,9 @@ const PropertyDetail = () => {
           {/* Property Images */}
           <div className="space-y-4">
             <div className="relative h-[400px] overflow-hidden rounded-lg">
+              <div className="absolute top-2 left-2 z-10">
+                {getStatusBadge(property.status)}
+              </div>
               <img 
                 src={selectedImage === 0 ? property.imageUrl : property.additionalImages[selectedImage - 1]} 
                 alt={property.title}
@@ -168,11 +191,16 @@ const PropertyDetail = () => {
 
           {/* Property Info */}
           <div>
-            <h1 className="text-3xl font-bold mb-2">{property.title}</h1>
+            <div className="flex items-start justify-between mb-2">
+              <h1 className="text-3xl font-bold">{property.title}</h1>
+            </div>
             <p className="text-primary text-2xl font-bold mb-4">{property.price}</p>
-            <div className="flex items-center mb-6">
+            <div className="flex items-center mb-3">
               <MapPin className="h-5 w-5 text-gray-500 mr-1" />
               <span className="text-gray-600">{property.location}</span>
+            </div>
+            <div className="flex items-center mb-6">
+              <span className="text-sm text-gray-500">Référence: {property.reference}</span>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -202,143 +230,147 @@ const PropertyDetail = () => {
               </div>
             </div>
 
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="w-full mb-4" size="lg">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Prendre rendez-vous pour visiter
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[500px]">
-                <DialogHeader>
-                  <DialogTitle>{bookingStep === 1 ? "Prendre un rendez-vous" : "Choisir votre méthode de paiement"}</DialogTitle>
-                </DialogHeader>
-                {bookingStep === 1 ? (
-                  <div className="grid gap-4 py-4">
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="name" className="text-right">
-                        Nom
-                      </Label>
-                      <Input
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="col-span-3"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="email" className="text-right">
-                        Email
-                      </Label>
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="col-span-3"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="phone" className="text-right">
-                        Téléphone
-                      </Label>
-                      <Input
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className="col-span-3"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="date" className="text-right">
-                        Date
-                      </Label>
-                      <Input
-                        id="date"
-                        name="date"
-                        type="date"
-                        value={formData.date}
-                        onChange={handleInputChange}
-                        className="col-span-3"
-                        required
-                      />
-                    </div>
-                    <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="message" className="text-right">
-                        Message
-                      </Label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        className="col-span-3"
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <div className="py-4 space-y-6">
-                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                      <div className="flex items-start space-x-2 mb-4">
-                        <RadioGroupItem value="mobile" id="mobile" />
-                        <div className="grid gap-1.5">
-                          <Label htmlFor="mobile" className="font-medium">
-                            Payer par Mobile Money
-                          </Label>
-                          <p className="text-sm text-muted-foreground">
-                            Paiement sécurisé via Mobile Money (Flooz, T-Money, etc.)
-                          </p>
-                          
-                          {paymentMethod === "mobile" && (
-                            <div className="mt-2">
-                              <Label htmlFor="mobileNumber">Numéro Mobile Money</Label>
-                              <Input
-                                id="mobileNumber"
-                                name="mobileNumber"
-                                value={formData.mobileNumber}
-                                onChange={handleInputChange}
-                                className="mt-1"
-                                placeholder="Ex: 91234567"
-                                required
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start space-x-2">
-                        <RadioGroupItem value="cash" id="cash" />
-                        <div className="grid gap-1.5">
-                          <Label htmlFor="cash" className="font-medium">
-                            Payer en espèces sur place
-                          </Label>
-                          <p className="text-sm text-muted-foreground">
-                            Vous paierez la visite directement sur place
-                          </p>
-                        </div>
-                      </div>
-                    </RadioGroup>
-                  </div>
-                )}
-                <div className="flex justify-end">
-                  {bookingStep === 2 && (
-                    <Button variant="outline" className="mr-2" onClick={() => setBookingStep(1)}>
-                      Retour
+            {property.status !== "indisponible" && (
+              <>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="w-full mb-4" size="lg">
+                      <Calendar className="mr-2 h-5 w-5" />
+                      Prendre rendez-vous pour visiter
                     </Button>
-                  )}
-                  <Button onClick={handleBookingSubmit}>
-                    {bookingStep === 1 ? "Continuer" : "Confirmer la réservation"}
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[500px]">
+                    <DialogHeader>
+                      <DialogTitle>{bookingStep === 1 ? "Prendre un rendez-vous" : "Choisir votre méthode de paiement"}</DialogTitle>
+                    </DialogHeader>
+                    {bookingStep === 1 ? (
+                      <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="name" className="text-right">
+                            Nom
+                          </Label>
+                          <Input
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="email" className="text-right">
+                            Email
+                          </Label>
+                          <Input
+                            id="email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="phone" className="text-right">
+                            Téléphone
+                          </Label>
+                          <Input
+                            id="phone"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="date" className="text-right">
+                            Date
+                          </Label>
+                          <Input
+                            id="date"
+                            name="date"
+                            type="date"
+                            value={formData.date}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            required
+                          />
+                        </div>
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="message" className="text-right">
+                            Message
+                          </Label>
+                          <Textarea
+                            id="message"
+                            name="message"
+                            value={formData.message}
+                            onChange={handleInputChange}
+                            className="col-span-3"
+                            rows={3}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="py-4 space-y-6">
+                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
+                          <div className="flex items-start space-x-2 mb-4">
+                            <RadioGroupItem value="mobile" id="mobile" />
+                            <div className="grid gap-1.5">
+                              <Label htmlFor="mobile" className="font-medium">
+                                Payer par Mobile Money
+                              </Label>
+                              <p className="text-sm text-muted-foreground">
+                                Paiement sécurisé via Mobile Money (Flooz, T-Money, etc.)
+                              </p>
+                              
+                              {paymentMethod === "mobile" && (
+                                <div className="mt-2">
+                                  <Label htmlFor="mobileNumber">Numéro Mobile Money</Label>
+                                  <Input
+                                    id="mobileNumber"
+                                    name="mobileNumber"
+                                    value={formData.mobileNumber}
+                                    onChange={handleInputChange}
+                                    className="mt-1"
+                                    placeholder="Ex: 91234567"
+                                    required
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-start space-x-2">
+                            <RadioGroupItem value="cash" id="cash" />
+                            <div className="grid gap-1.5">
+                              <Label htmlFor="cash" className="font-medium">
+                                Payer en espèces sur place
+                              </Label>
+                              <p className="text-sm text-muted-foreground">
+                                Vous paierez la visite directement sur place
+                              </p>
+                            </div>
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    )}
+                    <div className="flex justify-end">
+                      {bookingStep === 2 && (
+                        <Button variant="outline" className="mr-2" onClick={() => setBookingStep(1)}>
+                          Retour
+                        </Button>
+                      )}
+                      <Button onClick={handleBookingSubmit}>
+                        {bookingStep === 1 ? "Continuer" : "Confirmer la réservation"}
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
 
             <Link to="/contact">
               <Button variant="outline" className="w-full">
@@ -363,6 +395,40 @@ const PropertyDetail = () => {
               </li>
             ))}
           </ul>
+          
+          {/* Similar properties section */}
+          <h2 className="text-2xl font-bold mb-6">Biens similaires</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {propertiesData
+              .filter(p => p.id !== property.id && p.type === property.type)
+              .slice(0, 3)
+              .map(similarProperty => (
+                <Card key={similarProperty.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="relative">
+                    {getStatusBadge(similarProperty.status)}
+                    <img
+                      src={similarProperty.imageUrl}
+                      alt={similarProperty.title}
+                      className="w-full h-40 object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="p-4 space-y-2">
+                    <h3 className="text-lg font-semibold">{similarProperty.title}</h3>
+                    <p className="text-primary font-bold">{similarProperty.price}</p>
+                    <div className="flex items-center space-x-1">
+                      <MapPin className="h-4 w-4 text-gray-500" />
+                      <span className="text-gray-600">{similarProperty.location}</span>
+                    </div>
+                    <Link to={`/properties/${similarProperty.id}`}>
+                      <Button variant="outline" className="w-full mt-2" size="sm">
+                        Voir les détails
+                      </Button>
+                    </Link>
+                  </div>
+                </Card>
+              ))}
+          </div>
         </div>
       </div>
     </div>
