@@ -1,5 +1,6 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,6 +9,7 @@ import { Link } from "react-router-dom";
 import { MapPin, Home, Building, LandPlot, Search, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
+import { Footer } from "@/components/Footer";
 
 // Données des propriétés (identiques à celles de FeaturedProperties)
 const propertiesData = [
@@ -131,13 +133,31 @@ const propertiesData = [
 ];
 
 const Properties = () => {
-  const [filters, setFilters] = useState({
-    search: "",
-    type: "",
-    status: "",
+  const location = useLocation();
+  const navigate = useNavigate();
+  const queryParams = new URLSearchParams(location.search);
+  
+  const initialFilters = {
+    search: queryParams.get("search") || "",
+    type: queryParams.get("type") || "",
+    status: queryParams.get("status") || "",
     priceRange: [0, 300],
-    bedrooms: 0,
-  });
+    bedrooms: parseInt(queryParams.get("bedrooms") || "0", 10) || 0,
+  };
+
+  const [filters, setFilters] = useState(initialFilters);
+
+  // Mettre à jour l'URL lorsque les filtres changent
+  useEffect(() => {
+    const params = new URLSearchParams();
+    
+    if (filters.search) params.set("search", filters.search);
+    if (filters.type) params.set("type", filters.type);
+    if (filters.status) params.set("status", filters.status);
+    if (filters.bedrooms > 0) params.set("bedrooms", filters.bedrooms.toString());
+    
+    navigate({ search: params.toString() }, { replace: true });
+  }, [filters, navigate]);
 
   const handleFilterChange = (name, value) => {
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -204,7 +224,7 @@ const Properties = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
       {/* Hero Section */}
@@ -220,7 +240,7 @@ const Properties = () => {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 flex-grow">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Filtres */}
           <div className="lg:col-span-1">
@@ -429,6 +449,8 @@ const Properties = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

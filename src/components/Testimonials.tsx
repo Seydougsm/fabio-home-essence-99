@@ -1,8 +1,17 @@
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
 
 export const Testimonials = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { toast } = useToast();
+  
   const testimonials = [
     {
       name: "Kossi Adebayor",
@@ -30,6 +39,25 @@ export const Testimonials = () => {
     }
   ];
 
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const name = formData.get("name");
+    const country = formData.get("country");
+    const rating = formData.get("rating");
+    const review = formData.get("review");
+    
+    // Ici, vous pourriez ajouter le code pour envoyer les données à un serveur
+    
+    toast({
+      title: "Avis envoyé",
+      description: "Merci pour votre avis ! Il sera publié après modération.",
+    });
+    
+    setIsDialogOpen(false);
+    e.target.reset();
+  };
+
   return (
     <section className="py-16 bg-secondary">
       <div className="container mx-auto px-4">
@@ -56,12 +84,75 @@ export const Testimonials = () => {
           ))}
         </div>
         <div className="text-center">
-          <Button variant="default" size="lg" className="gap-2">
+          <Button variant="default" size="lg" className="gap-2" onClick={() => setIsDialogOpen(true)}>
             <MessageSquare className="h-5 w-5" />
             Laisser un avis
           </Button>
         </div>
       </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Partagez votre expérience</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleReviewSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Nom complet</Label>
+              <Input id="name" name="name" required placeholder="Votre nom" />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="country">Pays</Label>
+              <Input id="country" name="country" required placeholder="Votre pays" />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="rating">Note (1-5)</Label>
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map((num) => (
+                  <label key={num} className="flex items-center space-x-1 cursor-pointer">
+                    <input 
+                      type="radio" 
+                      name="rating" 
+                      value={num} 
+                      className="sr-only" 
+                      defaultChecked={num === 5}
+                    />
+                    <span 
+                      className="text-2xl select-none peer-checked:text-yellow-400"
+                      onClick={(e) => {
+                        const radioInput = e.currentTarget.previousSibling;
+                        radioInput.checked = true;
+                      }}
+                    >
+                      {num <= 5 ? "★" : "☆"}
+                    </span>
+                  </label>
+                ))}
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="review">Votre avis</Label>
+              <Textarea 
+                id="review" 
+                name="review" 
+                required 
+                placeholder="Partagez votre expérience avec nous..." 
+                rows={4}
+              />
+            </div>
+            
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">Annuler</Button>
+              </DialogClose>
+              <Button type="submit">Envoyer</Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

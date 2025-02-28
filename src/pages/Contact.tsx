@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
 const Contact = () => {
   const { toast } = useToast();
@@ -63,7 +64,7 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
 
       {/* Hero Section */}
@@ -79,7 +80,7 @@ const Contact = () => {
       </div>
 
       {/* Contact Content */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-16 flex-grow">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Information */}
           <div className="lg:col-span-1 space-y-8">
@@ -289,6 +290,8 @@ const Contact = () => {
           ></iframe>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };

@@ -1,19 +1,13 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Calendar, MapPin, Home, DollarSign, Bath, BedDouble, Phone } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/components/ui/use-toast";
+import { MapPin, Home, Bath, Ruler, Calendar, DownloadCloud, Share2 } from "lucide-react";
+import { Footer } from "@/components/Footer";
 
-// Mock data - in a real application this would come from an API
+// Données des propriétés (à remplacer par les appels API dans une application réelle)
 const propertiesData = [
   {
     id: 1,
@@ -23,17 +17,25 @@ const propertiesData = [
     type: "Villa",
     status: "vendre",
     reference: "08-23-DJL4R",
+    imageUrl: "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
+    images: [
+      "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
+      "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
+      "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png"
+    ],
     bedrooms: 4,
     bathrooms: 3,
     size: "350 m²",
-    land: "800 m²",
-    description: "Magnifique villa moderne située dans le quartier prisé de Djidjolé. Cette propriété dispose de 4 chambres spacieuses, 3 salles de bains, un salon lumineux, une cuisine équipée, une terrasse et un jardin aménagé. La villa est construite avec des matériaux de haute qualité et offre un confort exceptionnel.",
-    features: ["Piscine", "Jardin aménagé", "Garage pour 2 voitures", "Système d'alarme", "Climatisation", "Groupe électrogène"],
-    imageUrl: "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
-    additionalImages: [
-      "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
-      "/lovable-uploads/3cd69875-e62a-406b-8d63-32b43b0d4c14.png",
-      "/lovable-uploads/8e3a2ad2-8d16-4d9c-81c0-1a9550ecc66d.png",
+    yearBuilt: 2020,
+    description: "Magnifique villa moderne située dans un quartier prisé de Lomé. Cette propriété offre un cadre de vie exceptionnel avec ses 4 chambres spacieuses, son salon lumineux et sa cuisine équipée. Le jardin paysager et la piscine en font un lieu idéal pour se détendre en famille.",
+    features: [
+      "Piscine privée",
+      "Jardin paysager",
+      "Garage pour 2 voitures",
+      "Système d'alarme",
+      "Climatisation centralisée",
+      "Cuisine équipée",
+      "Dépendance pour personnel"
     ]
   },
   {
@@ -44,17 +46,25 @@ const propertiesData = [
     type: "Appartement",
     status: "louer",
     reference: "08-23-PYA2L",
+    imageUrl: "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
+    images: [
+      "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
+      "/lovable-uploads/1b238cdd-377c-4ce7-bbb0-a04d02a3ee45.png",
+      "/lovable-uploads/dcbb6f6e-496c-4294-a6bb-a9843ce2b2cd.png"
+    ],
     bedrooms: 3,
     bathrooms: 2,
     size: "180 m²",
-    land: "N/A",
-    description: "Superbe appartement de luxe situé au 3ème étage d'une résidence sécurisée sur l'Avenue de Pya. Il comprend 3 chambres, 2 salles de bains, un grand salon avec balcon, une cuisine moderne équipée et une buanderie. L'appartement bénéficie d'une finition haut de gamme et d'une vue imprenable sur la ville.",
-    features: ["Ascenseur", "Parking sécurisé", "Gardiennage 24/7", "Climatisation", "Cuisine équipée", "Balcon"],
-    imageUrl: "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
-    additionalImages: [
-      "/lovable-uploads/3cd69875-e62a-406b-8d63-32b43b0d4c14.png",
-      "/lovable-uploads/e269cc66-ac03-4635-ab20-594cd33eed3b.png",
-      "/lovable-uploads/b98932f2-395c-40a2-8cc2-6658bc67640c.png",
+    yearBuilt: 2018,
+    description: "Superbe appartement de standing dans une résidence sécurisée au cœur de Lomé. Très lumineux et parfaitement agencé, il offre un cadre de vie idéal avec ses 3 chambres dont une suite parentale, son salon spacieux et sa cuisine américaine entièrement équipée.",
+    features: [
+      "Résidence sécurisée 24/7",
+      "Ascenseur",
+      "Balcon avec vue dégagée",
+      "Parking souterrain",
+      "Climatisation",
+      "Cuisine américaine équipée",
+      "Salle de sport commune"
     ]
   },
   {
@@ -65,101 +75,76 @@ const propertiesData = [
     type: "Villa",
     status: "vendre",
     reference: "09-23-BGD3V",
+    imageUrl: "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
+    images: [
+      "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
+      "/lovable-uploads/3cd69875-e62a-406b-8d63-32b43b0d4c14.png",
+      "/lovable-uploads/8e3a2ad2-8d16-4d9c-81c0-1a9550ecc66d.png"
+    ],
     bedrooms: 3,
     bathrooms: 2,
     size: "220 m²",
-    land: "600 m²",
-    description: "Belle maison de vacances située à Baguida, à proximité de la plage. Cette propriété dispose de 3 chambres, 2 salles de bains, un grand salon, une cuisine équipée et une terrasse avec vue sur le jardin. La maison est vendue meublée et équipée, prête à vivre.",
-    features: ["Piscine", "Jardin tropical", "Terrasse", "Climatisation", "Meubles inclus", "Sécurité 24/7"],
-    imageUrl: "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
-    additionalImages: [
-      "/lovable-uploads/447ab3a7-5cc2-48b9-859c-4f8744bed1dc.png",
-      "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
-      "/lovable-uploads/8e3a2ad2-8d16-4d9c-81c0-1a9550ecc66d.png",
+    yearBuilt: 2019,
+    description: "Charmante villa de vacances située à Baguida, à quelques pas de la plage. Cette propriété bénéficie d'un environnement calme et verdoyant, parfait pour se ressourcer. Avec ses 3 chambres confortables et sa terrasse spacieuse, c'est l'endroit idéal pour profiter du climat togolais.",
+    features: [
+      "Accès direct à la plage",
+      "Terrasse vue mer",
+      "Jardin tropical",
+      "Douche extérieure",
+      "Climatisation",
+      "Cuisine d'été",
+      "Parking privatif"
     ]
-  },
-  {
-    id: 4,
-    title: "Terrain Commercial",
-    price: "200 000 000 FCFA",
-    location: "Zone Portuaire, Lomé",
-    type: "Terrain",
-    status: "indisponible",
-    reference: "08-23-PRT1X",
-    bedrooms: 0,
-    bathrooms: 0,
-    size: "N/A",
-    land: "2000 m²",
-    description: "Terrain commercial exceptionnel situé dans la Zone Portuaire de Lomé. Ce terrain de 2000 m² offre un emplacement stratégique pour tout projet commercial ou industriel. Il dispose de tous les documents légaux et est prêt pour la construction. Une opportunité unique pour les investisseurs.",
-    features: ["Emplacement stratégique", "Tous documents en règle", "Accès facile", "Proche des axes principaux", "Viabilisé"],
-    imageUrl: "/lovable-uploads/dcbb6f6e-496c-4294-a6bb-a9843ce2b2cd.png",
-    additionalImages: [
-      "/lovable-uploads/b98932f2-395c-40a2-8cc2-6658bc67640c.png",
-      "/lovable-uploads/e269cc66-ac03-4635-ab20-594cd33eed3b.png",
-      "/lovable-uploads/1b238cdd-377c-4ce7-bbb0-a04d02a3ee45.png",
-    ]
-  },
-  {
-    id: 5,
-    title: "Résidence Familiale",
-    price: "95 000 000 FCFA",
-    location: "Agbalépédo, Lomé",
-    type: "Maison",
-    status: "louer",
-    reference: "10-23-AGL2M",
-    bedrooms: 4,
-    bathrooms: 3,
-    size: "280 m²",
-    land: "500 m²",
-    description: "Spacieuse résidence familiale située dans le quartier calme d'Agbalépédo. Cette maison dispose de 4 chambres, 3 salles de bains, un grand salon/salle à manger, une cuisine moderne, un bureau et un jardin bien entretenu. Idéale pour une famille à la recherche de confort et de tranquillité.",
-    features: ["Jardin paysager", "Garage pour 2 voitures", "Cuisine équipée", "Climatisation", "Quartier résidentiel", "Sécurité"],
-    imageUrl: "/lovable-uploads/1b238cdd-377c-4ce7-bbb0-a04d02a3ee45.png",
-    additionalImages: [
-      "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
-      "/lovable-uploads/cd999047-db98-4386-a55b-8028ba11fec3.png",
-      "/lovable-uploads/4e18e10b-39b8-4019-a900-a7e5492fa40d.png",
-    ]
-  },
-  {
-    id: 6,
-    title: "Villa Préstige avec Piscine",
-    price: "250 000 000 FCFA",
-    location: "Aného, Togo",
-    type: "Villa",
-    status: "vendre",
-    reference: "11-23-ANH5P",
-    bedrooms: 5,
-    bathrooms: 4,
-    size: "450 m²",
-    land: "1200 m²",
-    description: "Magnifique villa de prestige située à Aného, à 45 minutes de Lomé. Cette propriété d'exception offre 5 chambres spacieuses avec salles de bains privatives, un vaste salon/salle à manger, une cuisine ultramoderne, une salle de sport, un home cinéma et une superbe piscine. La villa est construite avec des matériaux haut de gamme et dispose d'une vue imprenable sur la mer.",
-    features: ["Grande piscine à débordement", "Vue sur mer", "Domotique", "Cuisine ultramoderne", "Salle de sport", "Home cinéma", "Système d'alarme avancé", "Panneaux solaires"],
-    imageUrl: "/lovable-uploads/447ab3a7-5cc2-48b9-859c-4f8744bed1dc.png",
-    additionalImages: [
-      "/lovable-uploads/8e3a2ad2-8d16-4d9c-81c0-1a9550ecc66d.png",
-      "/lovable-uploads/e269cc66-ac03-4635-ab20-594cd33eed3b.png",
-      "/lovable-uploads/9b1b13eb-339b-4192-a909-fa3e075ad78f.png",
-    ]
-  },
+  }
 ];
 
 const PropertyDetail = () => {
   const { id } = useParams();
-  const { toast } = useToast();
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState("mobile");
-  const [bookingStep, setBookingStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    date: "",
-    message: "",
-    mobileNumber: ""
-  });
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [mainImage, setMainImage] = useState("");
 
-  // Find the property by ID
-  const property = propertiesData.find(p => p.id === Number(id));
+  useEffect(() => {
+    // Simuler un chargement des données
+    setTimeout(() => {
+      const foundProperty = propertiesData.find(p => p.id === parseInt(id, 10));
+      setProperty(foundProperty);
+      setMainImage(foundProperty?.images[0] || "");
+      setLoading(false);
+    }, 500);
+  }, [id]);
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case "vendre":
+        return <Badge className="bg-green-600 hover:bg-green-700">À VENDRE</Badge>;
+      case "louer":
+        return <Badge className="bg-blue-600 hover:bg-blue-700">À LOUER</Badge>;
+      case "indisponible":
+        return <Badge className="bg-red-600 hover:bg-red-700">NON DISPONIBLE</Badge>;
+      default:
+        return null;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white">
+        <Navbar />
+        <div className="container mx-auto px-4 pt-32 pb-16 flex items-center justify-center">
+          <div className="animate-pulse space-y-8 w-full max-w-6xl">
+            <div className="h-8 bg-gray-200 rounded w-3/4"></div>
+            <div className="h-96 bg-gray-200 rounded"></div>
+            <div className="space-y-4">
+              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+              <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!property) {
     return (
@@ -167,335 +152,163 @@ const PropertyDetail = () => {
         <Navbar />
         <div className="container mx-auto px-4 pt-32 pb-16 text-center">
           <h1 className="text-3xl font-bold mb-4">Propriété non trouvée</h1>
-          <p className="mb-8">La propriété que vous recherchez n'existe pas.</p>
-          <Link to="/">
-            <Button>Retour à l'accueil</Button>
+          <p className="text-gray-600 mb-8">La propriété que vous recherchez n'existe pas ou a été retirée.</p>
+          <Link to="/properties">
+            <Button>Retour aux propriétés</Button>
           </Link>
         </div>
       </div>
     );
   }
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleBookingSubmit = () => {
-    if (bookingStep === 1) {
-      setBookingStep(2);
-    } else {
-      toast({
-        title: "Réservation confirmée",
-        description: paymentMethod === "mobile" 
-          ? "Vous allez recevoir un SMS pour confirmer votre paiement Mobile Money." 
-          : "Votre rendez-vous a été confirmé. Vous paierez en espèces sur place.",
-      });
-      setBookingStep(1);
-    }
-  };
-
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case "vendre":
-        return <Badge className="bg-green-600 hover:bg-green-700 text-white px-3 py-1">À VENDRE</Badge>;
-      case "louer":
-        return <Badge className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1">À LOUER</Badge>;
-      case "indisponible":
-        return <Badge className="bg-red-600 hover:bg-red-700 text-white px-3 py-1">NON DISPONIBLE</Badge>;
-      default:
-        return null;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       <Navbar />
-      <div className="container mx-auto px-4 pt-32 pb-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Property Images */}
-          <div className="space-y-4">
-            <div className="relative h-[400px] overflow-hidden rounded-lg">
-              <div className="absolute top-2 left-2 z-10">
-                {getStatusBadge(property.status)}
-              </div>
+
+      <div className="container mx-auto px-4 pt-32 pb-16 flex-grow">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Images et galerie */}
+          <div className="lg:col-span-2">
+            <div className="mb-4">
               <img 
-                src={selectedImage === 0 ? property.imageUrl : property.additionalImages[selectedImage - 1]} 
-                alt={property.title}
-                className="w-full h-full object-cover"
+                src={mainImage} 
+                alt={property.title} 
+                className="w-full h-96 object-cover rounded-lg"
               />
             </div>
-            <div className="flex space-x-2 overflow-x-auto pb-2">
-              <div 
-                className={`h-20 w-20 flex-shrink-0 rounded cursor-pointer border-2 ${selectedImage === 0 ? 'border-primary' : 'border-transparent'}`}
-                onClick={() => setSelectedImage(0)}
-              >
-                <img 
-                  src={property.imageUrl} 
-                  alt={`${property.title} thumbnail`}
-                  className="w-full h-full object-cover rounded"
-                />
-              </div>
-              {property.additionalImages.map((img, index) => (
-                <div 
+            <div className="grid grid-cols-3 gap-2 mb-8">
+              {property.images.map((img, index) => (
+                <button 
                   key={index}
-                  className={`h-20 w-20 flex-shrink-0 rounded cursor-pointer border-2 ${selectedImage === index + 1 ? 'border-primary' : 'border-transparent'}`}
-                  onClick={() => setSelectedImage(index + 1)}
+                  onClick={() => setMainImage(img)}
+                  className={`p-1 rounded border-2 ${mainImage === img ? 'border-primary' : 'border-transparent'}`}
                 >
                   <img 
                     src={img} 
-                    alt={`${property.title} thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover rounded"
+                    alt={`Vue ${index + 1}`} 
+                    className="h-24 w-full object-cover rounded"
                   />
-                </div>
+                </button>
               ))}
+            </div>
+
+            {/* Description */}
+            <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+              <h2 className="text-2xl font-bold mb-4">Description</h2>
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                {property.description}
+              </p>
+
+              <h3 className="text-xl font-bold mb-3">Caractéristiques</h3>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-y-2 mb-6">
+                {property.features.map((feature, index) => (
+                  <li key={index} className="flex items-center text-gray-700">
+                    <span className="mr-2 text-primary">✓</span> {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Localisation */}
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-2xl font-bold mb-4">Localisation</h2>
+              <div className="h-72 bg-gray-200 rounded-lg overflow-hidden">
+                <iframe 
+                  width="100%" 
+                  height="100%" 
+                  frameBorder="0" 
+                  style={{ border: 0 }} 
+                  src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63520.88443348112!2d1.168572!3d6.173738!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1023e1c113185419%3A0x3224b5422caf411d!2sLom%C3%A9%2C%20Togo!5e0!3m2!1sfr!2sus!4v1683022830976!5m2!1sfr!2sus`} 
+                  allowFullScreen 
+                  title="Localisation de la propriété"
+                ></iframe>
+              </div>
             </div>
           </div>
 
-          {/* Property Info */}
-          <div>
-            <div className="flex items-start justify-between mb-2">
-              <h1 className="text-3xl font-bold">{property.title}</h1>
-            </div>
-            <p className="text-primary text-2xl font-bold mb-4">{property.price}</p>
-            <div className="flex items-center mb-3">
-              <MapPin className="h-5 w-5 text-gray-500 mr-1" />
-              <span className="text-gray-600">{property.location}</span>
-            </div>
-            <div className="flex items-center mb-6">
-              <span className="text-sm text-gray-500">Référence: {property.reference}</span>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-              <div className="flex flex-col items-center p-3 bg-secondary rounded-lg">
-                <Home className="h-6 w-6 text-primary mb-1" />
-                <span className="text-sm text-gray-600">Type</span>
-                <span className="font-medium">{property.type}</span>
-              </div>
-              {property.bedrooms > 0 && (
-                <div className="flex flex-col items-center p-3 bg-secondary rounded-lg">
-                  <BedDouble className="h-6 w-6 text-primary mb-1" />
-                  <span className="text-sm text-gray-600">Chambres</span>
-                  <span className="font-medium">{property.bedrooms}</span>
+          {/* Détails et contact */}
+          <div className="lg:col-span-1">
+            <div className="bg-white p-6 rounded-lg shadow-md mb-8 sticky top-24">
+              <div className="flex justify-between items-start mb-4">
+                <h1 className="text-2xl font-bold">{property.title}</h1>
+                <div className="flex space-x-2">
+                  <button className="p-2 rounded hover:bg-gray-100" title="Partager">
+                    <Share2 className="h-5 w-5" />
+                  </button>
+                  <button className="p-2 rounded hover:bg-gray-100" title="Télécharger la brochure">
+                    <DownloadCloud className="h-5 w-5" />
+                  </button>
                 </div>
-              )}
-              {property.bathrooms > 0 && (
-                <div className="flex flex-col items-center p-3 bg-secondary rounded-lg">
-                  <Bath className="h-6 w-6 text-primary mb-1" />
-                  <span className="text-sm text-gray-600">Salles de bain</span>
-                  <span className="font-medium">{property.bathrooms}</span>
+              </div>
+              <p className="text-2xl font-bold text-primary mb-4">{property.price}</p>
+              <div className="flex items-center mb-4">
+                <MapPin className="h-5 w-5 text-gray-500 mr-2" />
+                <span className="text-gray-700">{property.location}</span>
+              </div>
+
+              <div className="border-t border-b border-gray-200 py-4 my-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col">
+                    <span className="text-gray-500 text-sm">Type</span>
+                    <div className="flex items-center mt-1">
+                      <Home className="h-4 w-4 text-primary mr-1" />
+                      <span className="font-medium">{property.type}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-gray-500 text-sm">Statut</span>
+                    <div className="mt-1">
+                      {getStatusBadge(property.status)}
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-gray-500 text-sm">Chambres</span>
+                    <div className="flex items-center mt-1">
+                      <span className="font-medium">{property.bedrooms}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-gray-500 text-sm">Salles de bain</span>
+                    <div className="flex items-center mt-1">
+                      <Bath className="h-4 w-4 text-primary mr-1" />
+                      <span className="font-medium">{property.bathrooms}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-gray-500 text-sm">Surface</span>
+                    <div className="flex items-center mt-1">
+                      <Ruler className="h-4 w-4 text-primary mr-1" />
+                      <span className="font-medium">{property.size}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-gray-500 text-sm">Année</span>
+                    <div className="flex items-center mt-1">
+                      <Calendar className="h-4 w-4 text-primary mr-1" />
+                      <span className="font-medium">{property.yearBuilt}</span>
+                    </div>
+                  </div>
                 </div>
-              )}
-              <div className="flex flex-col items-center p-3 bg-secondary rounded-lg">
-                <DollarSign className="h-6 w-6 text-primary mb-1" />
-                <span className="text-sm text-gray-600">Surface</span>
-                <span className="font-medium">{property.land}</span>
+              </div>
+
+              <div className="mb-4 text-sm text-gray-500">
+                Référence: {property.reference}
+              </div>
+
+              <div className="space-y-3">
+                <Button className="w-full" size="lg">
+                  Contacter l'agent
+                </Button>
+                <Button variant="outline" className="w-full" size="lg">
+                  Prendre rendez-vous pour visiter
+                </Button>
               </div>
             </div>
-
-            {property.status !== "indisponible" && (
-              <>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="w-full mb-4" size="lg">
-                      <Calendar className="mr-2 h-5 w-5" />
-                      Prendre rendez-vous pour visiter
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[500px]">
-                    <DialogHeader>
-                      <DialogTitle>{bookingStep === 1 ? "Prendre un rendez-vous" : "Choisir votre méthode de paiement"}</DialogTitle>
-                    </DialogHeader>
-                    {bookingStep === 1 ? (
-                      <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="name" className="text-right">
-                            Nom
-                          </Label>
-                          <Input
-                            id="name"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            className="col-span-3"
-                            required
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="email" className="text-right">
-                            Email
-                          </Label>
-                          <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            className="col-span-3"
-                            required
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="phone" className="text-right">
-                            Téléphone
-                          </Label>
-                          <Input
-                            id="phone"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleInputChange}
-                            className="col-span-3"
-                            required
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="date" className="text-right">
-                            Date
-                          </Label>
-                          <Input
-                            id="date"
-                            name="date"
-                            type="date"
-                            value={formData.date}
-                            onChange={handleInputChange}
-                            className="col-span-3"
-                            required
-                          />
-                        </div>
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="message" className="text-right">
-                            Message
-                          </Label>
-                          <Textarea
-                            id="message"
-                            name="message"
-                            value={formData.message}
-                            onChange={handleInputChange}
-                            className="col-span-3"
-                            rows={3}
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="py-4 space-y-6">
-                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-                          <div className="flex items-start space-x-2 mb-4">
-                            <RadioGroupItem value="mobile" id="mobile" />
-                            <div className="grid gap-1.5">
-                              <Label htmlFor="mobile" className="font-medium">
-                                Payer par Mobile Money
-                              </Label>
-                              <p className="text-sm text-muted-foreground">
-                                Paiement sécurisé via Mobile Money (Flooz, T-Money, etc.)
-                              </p>
-                              
-                              {paymentMethod === "mobile" && (
-                                <div className="mt-2">
-                                  <Label htmlFor="mobileNumber">Numéro Mobile Money</Label>
-                                  <Input
-                                    id="mobileNumber"
-                                    name="mobileNumber"
-                                    value={formData.mobileNumber}
-                                    onChange={handleInputChange}
-                                    className="mt-1"
-                                    placeholder="Ex: 91234567"
-                                    required
-                                  />
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-start space-x-2">
-                            <RadioGroupItem value="cash" id="cash" />
-                            <div className="grid gap-1.5">
-                              <Label htmlFor="cash" className="font-medium">
-                                Payer en espèces sur place
-                              </Label>
-                              <p className="text-sm text-muted-foreground">
-                                Vous paierez la visite directement sur place
-                              </p>
-                            </div>
-                          </div>
-                        </RadioGroup>
-                      </div>
-                    )}
-                    <div className="flex justify-end">
-                      {bookingStep === 2 && (
-                        <Button variant="outline" className="mr-2" onClick={() => setBookingStep(1)}>
-                          Retour
-                        </Button>
-                      )}
-                      <Button onClick={handleBookingSubmit}>
-                        {bookingStep === 1 ? "Continuer" : "Confirmer la réservation"}
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </>
-            )}
-
-            <Link to="/contact">
-              <Button variant="outline" className="w-full">
-                <Phone className="mr-2 h-5 w-5" />
-                Contacter l'agent immobilier
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        {/* Property Description */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-4">Description</h2>
-          <p className="text-gray-700 mb-8 whitespace-pre-line">{property.description}</p>
-
-          <h2 className="text-2xl font-bold mb-4">Caractéristiques</h2>
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-12">
-            {property.features.map((feature, index) => (
-              <li key={index} className="flex items-center">
-                <div className="h-2 w-2 bg-primary rounded-full mr-2"></div>
-                <span>{feature}</span>
-              </li>
-            ))}
-          </ul>
-          
-          {/* Similar properties section */}
-          <h2 className="text-2xl font-bold mb-6">Biens similaires</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {propertiesData
-              .filter(p => p.id !== property.id && p.type === property.type)
-              .slice(0, 3)
-              .map(similarProperty => (
-                <Card key={similarProperty.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="relative">
-                    <div className="absolute top-2 left-2">
-                      {getStatusBadge(similarProperty.status)}
-                    </div>
-                    <img
-                      src={similarProperty.imageUrl}
-                      alt={similarProperty.title}
-                      className="w-full h-40 object-cover"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="p-4 space-y-2">
-                    <h3 className="text-lg font-semibold">{similarProperty.title}</h3>
-                    <p className="text-primary font-bold">{similarProperty.price}</p>
-                    <div className="flex items-center space-x-1">
-                      <MapPin className="h-4 w-4 text-gray-500" />
-                      <span className="text-gray-600">{similarProperty.location}</span>
-                    </div>
-                    <Link to={`/properties/${similarProperty.id}`}>
-                      <Button variant="outline" className="w-full mt-2" size="sm">
-                        Voir les détails
-                      </Button>
-                    </Link>
-                  </div>
-                </Card>
-              ))}
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 };
