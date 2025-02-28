@@ -37,6 +37,24 @@ const Contact = () => {
     });
   };
 
+  // Numéros de téléphone avec formatage pour les liens
+  const phoneNumbers = [
+    { display: "+228 90 12 34 56", raw: "+22890123456" },
+    { display: "+228 99 87 65 43", raw: "+22899876543" }
+  ];
+
+  // Adresse avec coordonnées pour Google Maps
+  const address = {
+    display: "Boulevard du Mono, Quartier Administratif, Lomé, Togo",
+    coords: "6.173738,1.168572" // Latitude,Longitude de Lomé
+  };
+
+  // Adresses email
+  const emails = [
+    "info@fabioimmobilier.com",
+    "contact@fabioimmobilier.com"
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -66,8 +84,20 @@ const Contact = () => {
                   <Phone className="h-5 w-5 text-primary mt-1 mr-3" />
                   <div>
                     <h3 className="font-medium">Téléphone</h3>
-                    <p className="text-gray-600">+228 90 12 34 56</p>
-                    <p className="text-gray-600">+228 99 87 65 43</p>
+                    {phoneNumbers.map((phone, index) => (
+                      <p key={index} className="text-gray-600">
+                        <a 
+                          href={`tel:${phone.raw}`} 
+                          className="hover:text-primary transition-colors"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.open(`https://wa.me/${phone.raw.replace('+', '')}`, '_blank');
+                          }}
+                        >
+                          {phone.display} (WhatsApp)
+                        </a>
+                      </p>
+                    ))}
                   </div>
                 </div>
                 
@@ -75,8 +105,16 @@ const Contact = () => {
                   <Mail className="h-5 w-5 text-primary mt-1 mr-3" />
                   <div>
                     <h3 className="font-medium">Email</h3>
-                    <p className="text-gray-600">info@fabioimmobilier.com</p>
-                    <p className="text-gray-600">contact@fabioimmobilier.com</p>
+                    {emails.map((email, index) => (
+                      <p key={index} className="text-gray-600">
+                        <a 
+                          href={`mailto:${email}`} 
+                          className="hover:text-primary transition-colors"
+                        >
+                          {email}
+                        </a>
+                      </p>
+                    ))}
                   </div>
                 </div>
                 
@@ -85,9 +123,14 @@ const Contact = () => {
                   <div>
                     <h3 className="font-medium">Adresse</h3>
                     <p className="text-gray-600">
-                      Boulevard du Mono, Quartier Administratif
-                      <br />
-                      Lomé, Togo
+                      <a 
+                        href={`https://www.google.com/maps/search/?api=1&query=${address.coords}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-primary transition-colors"
+                      >
+                        {address.display}
+                      </a>
                     </p>
                   </div>
                 </div>

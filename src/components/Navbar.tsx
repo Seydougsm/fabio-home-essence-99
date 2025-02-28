@@ -32,7 +32,7 @@ export const Navbar = () => {
             <Link to="/" className="text-gray-700 hover:text-primary transition-colors">
               Accueil
             </Link>
-            <Link to="/" className="text-gray-700 hover:text-primary transition-colors">
+            <Link to="/properties" className="text-gray-700 hover:text-primary transition-colors">
               Propriétés
             </Link>
             <Link to="/contact" className="text-gray-700 hover:text-primary transition-colors">
@@ -55,7 +55,7 @@ export const Navbar = () => {
               Accueil
             </Link>
             <Link
-              to="/"
+              to="/properties"
               className="block px-3 py-2 text-gray-700 hover:text-primary transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
